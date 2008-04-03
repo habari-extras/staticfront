@@ -45,11 +45,11 @@ class StaticFront extends Plugin
 			switch ( $action ) {
 				case _t('Set Home Page') :
 					$ui = new FormUI( 'staticfront' );
-					$control= $ui->add( 'select', 'page', 'The page to show for the home page: ', Options::get( self::OPTION_NAME ) );
-					$control->options['none']= _t('Show Normal Posts');
+					$options['none']= _t('Show Normal Posts');
 					foreach( $this->get_all_pages() as $page ) {
-						$control->options[$page->slug]= $page->title;
+						$options[$page->slug]= $page->title;
 					}
+					$control= $ui->add( 'select', 'page', 'The page to show for the home page: ', $options, Options::get( self::OPTION_NAME ) );
 					$ui->out();
 					break;
 			}
