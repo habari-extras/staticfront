@@ -34,7 +34,7 @@ class StaticFront extends Plugin
 	public function filter_plugin_config( $actions, $plugin_id )
       {
 		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[]= _t('Set Home Page');
+			$actions[]= _t('Set Home Page', 'staticfront');
 		}
 		return $actions;
 	}
@@ -43,10 +43,10 @@ class StaticFront extends Plugin
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
-				case _t('Set Home Page') :
+				case _t('Set Home Page', 'staticfront') :
 					$ui= new FormUI( 'staticfront' );
-					$control= $ui->add( 'select', 'page', 'The page to show for the home page: ' );
-					$control->options['none']= _t('Show Normal Posts');
+					$control= $ui->add( 'select', 'page', _t('The page to show for the home page: ', 'staticfront') );
+					$control->options['none']= _t('Show Normal Posts', 'staticfront');
 					foreach( $this->get_all_pages() as $page ) {
 						$control->options[$page->slug]= $page->title;
 					}
