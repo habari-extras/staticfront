@@ -4,7 +4,6 @@ class StaticFront extends Plugin
 {
 	
 	const VERSION= '0.1';
-	const OPTION_NAME= 'staticfront:page';
 	
 	/**
 	 * Return plugin metadata for this plugin
@@ -26,7 +25,8 @@ class StaticFront extends Plugin
 	public function action_plugin_activation( $file )
 	{
 		if ( $file == $this->get_file() ) {
-			Options::set( self::OPTION_NAME, 'none' );
+			Options::set( 'staticfront:page', 'none' );
+			Options::set( 'staticfront:blog_index', 'blog' );
 		}
 	}
 	
@@ -45,11 +45,13 @@ class StaticFront extends Plugin
 			switch ( $action ) {
 				case _t('Set Home Page', 'staticfront') :
 					$ui= new FormUI( 'staticfront' );
-					$control= $ui->add( 'select', 'page', _t('The page to show for the home page: ', 'staticfront') );
-					$control->options['none']= _t('Show Normal Posts', 'staticfront');
-					foreach( $this->get_all_pages() as $page ) {
-						$control->options[$page->slug]= $page->title;
+					$page= $ui->add( 'select', 'page', _t('The page to show for the home page: ', 'staticfront') );
+					$page->options['none']= _t('Show Normal Posts', 'staticfront');
+					foreach( $this->get_all_pages() as $post ) {
+						$page->options[$post->slug]= $post->title;
 					}
+					$blog_index= $ui->add( 'text', 'blog_index', sprintf( _t('Show normal posts at this URL: <b>%s</b>', 'staticfront'), Site::get_url( 'habari', true ) ) );
+					$blog_index->add_validator( 'validate_required' );
 					$ui->out();
 					break;
 			}
@@ -58,19 +60,36 @@ class StaticFront extends Plugin
 	
 	private function get_all_pages()
 	{
-		$pages= Posts::get( array( 'content_type' => Post::type('page') ) );
+		$pages= Posts::get( array( 'content_type' => Post::type('page'), 'nolimit' => 1 ) );
 		return $pages;
 	}
 	
 	public function filter_theme_act_display_home( $handled, &$theme )
 	{
-		$page= Options::get( self::OPTION_NAME );
+		$page= Options::get( 'staticfront:page' );
 		if ( $page && $page != 'none' ) {
 			$post= Post::get( array( 'slug' => $page ) );
 			$theme->act_display( array( 'posts' => $post ) );
 			return true;
 		}
 		return false;
+	}
+	
+	public function filter_rewrite_rules( $rules )
+	{
+		$base= trim( Options::get( 'staticfront:blog_index' ) , '/' );
+		$rules[] = new RewriteRule(array(
+			'name' => 'display_blog_home',
+			'parse_regex' => '%^' . $base . '(?:/page/(?P<page>\d+))?/?$%',
+			'build_str' => '' . $base . '(/page/{$page})',
+			'handler' => 'UserThemeHandler',
+			'action' => 'display_entries',
+			'priority' => 1,
+			'rule_class' => RewriteRule::RULE_PLUGIN,
+			'is_active' => 1,
+			'description' => 'Blog index display for StaticFront' )
+			);
+		return $rules;
 	}
 }
 
