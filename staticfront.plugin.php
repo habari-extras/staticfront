@@ -77,18 +77,20 @@ class StaticFront extends Plugin
 	
 	public function filter_rewrite_rules( $rules )
 	{
-		$base= trim( Options::get( 'staticfront:blog_index' ) , '/' );
-		$rules[] = new RewriteRule(array(
-			'name' => 'display_blog_home',
-			'parse_regex' => '%^' . $base . '(?:/page/(?P<page>\d+))?/?$%',
-			'build_str' => '' . $base . '(/page/{$page})',
-			'handler' => 'UserThemeHandler',
-			'action' => 'display_entries',
-			'priority' => 1,
-			'rule_class' => RewriteRule::RULE_PLUGIN,
-			'is_active' => 1,
-			'description' => 'Blog index display for StaticFront' )
-			);
+		if ( Options::get( 'staticfront:page' ) != 'none' ) {
+			$base= trim( Options::get( 'staticfront:blog_index' ) , '/' );
+			$rules[] = new RewriteRule(array(
+				'name' => 'display_blog_home',
+				'parse_regex' => '%^' . $base . '(?:/page/(?P<page>\d+))?/?$%',
+				'build_str' => '' . $base . '(/page/{$page})',
+				'handler' => 'UserThemeHandler',
+				'action' => 'display_home',
+				'priority' => 1,
+				'rule_class' => RewriteRule::RULE_PLUGIN,
+				'is_active' => 1,
+				'description' => 'Blog index display for StaticFront' )
+				);
+		}
 		return $rules;
 	}
 }
