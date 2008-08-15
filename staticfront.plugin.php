@@ -66,10 +66,17 @@ class StaticFront extends Plugin
 					$keep_pages= $ui->append( 'checkbox', 'keep_pages', 'staticfront__keep_pages', _t( 'Show static pages at base url: ', 'staticfront' ) );
 
 					$ui->append( 'submit', 'save', _t('Save') );
+					$ui->on_success( array( $this, 'updated_config' ) );
 					$ui->out(); 
 					break;
 			}
 		}
+	}
+	
+	public function updated_config( $ui )
+	{
+		Session::notice( 'StaticFront options updated!' );
+		$ui->save;
 	}
 
 	private function get_all_pages()
@@ -115,6 +122,7 @@ class StaticFront extends Plugin
 		if ( Options::get( 'staticfront__page' ) != 'none' ) {
 
 			$base= trim( Options::get( 'staticfront__blog_index' ) , '/' );
+			$stay= Options::get( 'staticfront__keep_pages' );
 
 			$move =  array(
 				'display_entries_by_date' => $base . '/',
@@ -130,7 +138,7 @@ class StaticFront extends Plugin
 			}
 
 			foreach( $rules as $rule ) {
-				if( isset( $move[$rule->name] ) && strpos( $rule->build_str, $base ) === FALSE ) {
+				if( isset( $move[$rule->name] ) && strpos( $rule->build_str, $base . '/' ) === FALSE ) {
 					$rule->parse_regex= substr( $rule->parse_regex, 0, 2 ) . $move[$rule->name] . substr( $rule->parse_regex, 2 );
 					$rule->build_str= $move[$rule->name] . $rule->build_str;
 				}
