@@ -66,7 +66,7 @@ class StaticFront extends Plugin
 					$keep_pages= $ui->append( 'checkbox', 'keep_pages', 'staticfront__keep_pages', _t( 'Show static pages at base url: ', 'staticfront' ) );
 
 					$ui->append( 'submit', 'save', _t('Save') );
-					$ui->on_success( array( $this, 'updated_config' ) );
+					$ui->success( array( $this, 'updated_config' ) );
 					$ui->out(); 
 					break;
 			}
