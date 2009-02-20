@@ -1,0 +1,8 @@
+<plugin>
+	<url>http://habariproject.org</url>
+	<name>StaticFront</name>
+	<license>Apache License 2.0</license>
+	<author>Habari Community</author>
+	<description>Allows you to set a page to show as the home page.</description>
+</plugin>
+
