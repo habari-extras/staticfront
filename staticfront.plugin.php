@@ -2,26 +2,6 @@
 
 class StaticFront extends Plugin
 {
-
-	const VERSION= '0.2';
-
-	/**
-	 * Return plugin metadata for this plugin
-	 *
-	 * @return array Plugin metadata
-	 */
-	public function info()
-	{
-		return array(
-			'url' => 'http://habariproject.org',
-			'name' => 'StaticFront',
-			'license' => 'Apache License 2.0',
-			'author' => 'Habari Community',
-			'version' => self::VERSION,
-			'description' => 'Allows you to set a page to show as the home page.'
-		);
-	}
-	
 	public function action_plugin_activation( $file )
 	{
 		if ( realpath( $file ) == __FILE__ ) {

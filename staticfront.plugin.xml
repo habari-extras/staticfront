@@ -1,8 +1,10 @@
-<plugin>
-	<url>http://habariproject.org</url>
+<?xml version="1.0" encoding="utf-8" ?>
+<pluggable type="plugin">
 	<name>StaticFront</name>
-	<license>Apache License 2.0</license>
-	<author>Habari Community</author>
-	<description>Allows you to set a page to show as the home page.</description>
-</plugin>
-
+	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</license>
+	<author url="http://habariproject.org">Habari Community</author>
+	<version>0.2</version>
+	<url>http://habariproject.org</url>
+	<description><![CDATA[Allows you to set a page to show as the home page.]]></description>
+	<copyright>2008</copyright>
+</pluggable>
