@@ -65,7 +65,7 @@ class StaticFront extends Plugin
 		return $pages;
 	}
 
-	public function filter_theme_act_display_home( $handled, &$theme )
+	public function filter_theme_act_display_home( $handled, $theme )
 	{
 		$page= Options::get( 'staticfront__page' );
 		if ( $page && $page != 'none' ) {
@@ -76,7 +76,7 @@ class StaticFront extends Plugin
 		return FALSE;
 	}
 
-	public function filter_theme_act_display_blog_home( $handled, &$theme )
+	public function filter_theme_act_display_blog_home( $handled, $theme )
 	{
 		$page= Options::get( 'staticfront__page' );
 		if ( $page && $page != 'none' ) {
