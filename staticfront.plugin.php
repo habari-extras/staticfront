@@ -118,7 +118,7 @@ class StaticFront extends Plugin
 			}
 
 			foreach( $rules as $rule ) {
-				if( isset( $move[$rule->name] ) && strpos( $rule->build_str, $base . '/' ) === FALSE ) {
+				if( isset( $move[$rule->name] ) && strpos( $rule->build_str, $base . '/' ) === FALSE && strpos( $rule->parse_regex, '/^' ) === FALSE )  {
 					$rule->parse_regex= substr( $rule->parse_regex, 0, 2 ) . $move[$rule->name] . substr( $rule->parse_regex, 2 );
 					$rule->build_str= $move[$rule->name] . $rule->build_str;
 				}
