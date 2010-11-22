@@ -11,52 +11,29 @@ class StaticFront extends Plugin
 		}
 	}
 
-	/**
-	 * Add update beacon support
-	 **/
-	public function action_update_check()
+	public function configure()
 	{
-	 	Update::add( 'StaticFront', 'cc3fd1b0-3bca-11dd-ae16-0800200c9a66', $this->info->version );
-	}
-
-	/* Set up options */
-	public function filter_plugin_config( $actions, $plugin_id )
-	{
-		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[]= _t('Configure', 'staticfront');
+		$ui= new FormUI( 'staticfront' );
+		$page= $ui->append( 'select', 'page', 'staticfront__page', _t('The page to show for the home page: ', 'staticfront') );
+		$page->options['none']= _t('Show Normal Posts', 'staticfront');
+		foreach( $this->get_all_pages() as $post ) {
+			$page->options[$post->slug]= $post->title;
 		}
-		return $actions;
-	}
+		$blog_index= $ui->append( 'text', 'blog_index', 'staticfront__blog_index', sprintf( _t('Show normal posts at this URL: <b>%s</b>', 'staticfront'), Site::get_url( 'habari', true ) ) );
 
-	public function action_plugin_ui( $plugin_id, $action )
-	{
-		if ( $plugin_id == $this->plugin_id() ) {
-			switch ( $action ) {
-				case _t('Configure', 'staticfront') :
-					$ui= new FormUI( 'staticfront' );
-					$page= $ui->append( 'select', 'page', 'staticfront__page', _t('The page to show for the home page: ', 'staticfront') );
-					$page->options['none']= _t('Show Normal Posts', 'staticfront');
-					foreach( $this->get_all_pages() as $post ) {
-						$page->options[$post->slug]= $post->title;
-					}
-					$blog_index= $ui->append( 'text', 'blog_index', 'staticfront__blog_index', sprintf( _t('Show normal posts at this URL: <b>%s</b>', 'staticfront'), Site::get_url( 'habari', true ) ) );
+		$blog_index->add_validator( 'validate_required' );
 
-					$blog_index->add_validator( 'validate_required' );
+		$keep_pages= $ui->append( 'checkbox', 'keep_pages', 'staticfront__keep_pages', _t( 'Show static pages at base url: ', 'staticfront' ) );
 
-					$keep_pages= $ui->append( 'checkbox', 'keep_pages', 'staticfront__keep_pages', _t( 'Show static pages at base url: ', 'staticfront' ) );
-
-					$ui->append( 'submit', 'save', _t('Save') );
-					$ui->success( array( $this, 'updated_config' ) );
-					$ui->out(); 
-					break;
-			}
-		}
+		$ui->append( 'submit', 'save', _t('Save') );
+		$ui->success( array( $this, 'updated_config' ) );
+		return $ui;
 	}
 	
 	public function updated_config( $ui )
 	{
 		Session::notice( 'StaticFront options updated!' );
-		$ui->save;
+		$ui->save();
 	}
 
 	private function get_all_pages()

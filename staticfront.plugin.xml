@@ -5,6 +5,7 @@
 	<author url="http://habariproject.org">The Habari Community</author>
 	<version>0.3</version>
 	<url>http://habariproject.org</url>
+	<guid>cc3fd1b0-3bca-11dd-ae16-0800200c9a66</guid>
 	<description><![CDATA[Allows you to set a page to show as the home page.]]></description>
 	<copyright>2010</copyright>
 </pluggable> 
