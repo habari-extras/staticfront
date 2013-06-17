@@ -4,11 +4,9 @@ class StaticFront extends Plugin
 {
 	public function action_plugin_activation( $file )
 	{
-		if ( realpath( $file ) == __FILE__ ) {
-			Options::set( 'staticfront__page', 'none' );
-			Options::set( 'staticfront__blog_index', 'blog' );
-			Options::set( 'staticfront__keep_pages', TRUE );
-		}
+		Options::set( 'staticfront__page', 'none' );
+		Options::set( 'staticfront__blog_index', 'blog' );
+		Options::set( 'staticfront__keep_pages', TRUE );
 	}
 
 	public function configure()
